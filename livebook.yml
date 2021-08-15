@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: livebook-service
+  labels:
+    app: livebook
+spec:
+  selector:
+    app: livebook
+  type: NodePort
+  ports:
+  - protocol: TCP
+    port: 8080
+    targetPort: 8080
+    nodePort: 30080
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: livebook-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: livebook
+  template:
+    metadata:
+      labels:
+        app: livebook
+    spec:
+      containers:
+      - name: livebook-container
+        image: localhost:5000/livebook
+        ports:
+        - containerPort: 8080
+
